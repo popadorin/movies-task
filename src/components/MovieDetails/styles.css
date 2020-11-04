@@ -1,0 +1,18 @@
+.movie-details-container {
+    padding: 25px;
+    width: 400px;
+}
+
+.movie-details-image {
+    object-fit: contain;
+    height: 250px;
+    float: right;
+}
+
+.movie-details-prop-key {
+    font-weight: 500;
+}
+
+.movie-details-prop-value {
+    font-weight: 300;
+}
