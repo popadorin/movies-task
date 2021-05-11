@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {ChangeEvent, SyntheticEvent} from 'react';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import './styles.css'
+import {Movie} from "../../types";
 
-export function SearchForm({onSubmit, proposedMovies, onQueryChange}) {
+interface Props {
+    onSubmit: (e: SyntheticEvent) => void
+    proposedMovies?: Movie[]
+    onQueryChange: (query: string) => void
+}
+
+export function SearchForm({onSubmit, proposedMovies, onQueryChange}: Props) {
     return (
         <form onSubmit={onSubmit}>
             <div>
@@ -12,8 +19,14 @@ export function SearchForm({onSubmit, proposedMovies, onQueryChange}) {
                     id="search-form"
                     options={proposedMovies ? proposedMovies.map(m => m.title) : []}
                     disableClearable
-                    onChange={e => onQueryChange(e.target.innerText || e.target.defaultValue)}
-                    onSelect={e => onQueryChange(e.target.defaultValue)}
+                    onChange={(e: ChangeEvent<{}>) => {
+                        const target = e.target as HTMLInputElement;
+                        onQueryChange(target.innerText || target.defaultValue)
+                    }}
+                    onSelect={(e: SyntheticEvent) => {
+                        const target = e.target as HTMLInputElement;
+                        onQueryChange(target.defaultValue)
+                    }}
                     renderInput={params => (
                         <TextField
                             {...params}

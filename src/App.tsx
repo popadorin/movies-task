@@ -1,24 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, {SyntheticEvent, useEffect, useState} from 'react';
 import Modal from "@material-ui/core/Modal";
 import {MovieListItem, MovieDetails, SearchForm} from "./components";
 import {getMoviesByQuery} from "./helpers";
 import './App.css';
 import {useDebounce} from "./hooks";
+import {Movie} from "./types";
 
 function App() {
-    const [query, setQuery] = useState('');
-    const [movies, setMovies] = useState(undefined);
-    const [proposedMovies, setProposedMovies] = useState(undefined);
-    const [selectedMovie, setSelectedMovie] = useState(undefined);
-    const [isMovieModalVisible, setMovieModalVisibility] = useState(false);
+    const [query, setQuery] = useState<string>('');
+    const [movies, setMovies] = useState<Movie[] | undefined>(undefined);
+    const [proposedMovies, setProposedMovies] = useState<Movie[] | undefined>(undefined);
+    const [selectedMovie, setSelectedMovie] = useState<Movie | undefined>(undefined);
+    const [isMovieModalVisible, setMovieModalVisibility] = useState<boolean>(false);
     const debouncedQuery = useDebounce(query, 500);
 
-    const onSearchSubmit = e => {
+    const onSearchSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
         getMoviesByQuery(debouncedQuery).then(movies => setMovies(movies));
     }
 
-    const onQueryChange = text => {
+    const onQueryChange = (text: string) => {
         setQuery(text);
     }
 
@@ -26,7 +27,7 @@ function App() {
         setMovieModalVisibility(false);
     }
 
-    const onMovieCardClick = (movie) => {
+    const onMovieCardClick = (movie: Movie) => {
         setSelectedMovie(movie);
         setMovieModalVisibility(true);
     }
@@ -45,7 +46,7 @@ function App() {
                 <div>
                     {
                         movies && movies.map(movie => (
-                            <MovieListItem onClick={() => onMovieCardClick(movie)} key={movie.id} {...movie}/>
+                            <MovieListItem onClick={() => onMovieCardClick(movie)} key={movie.id} movie={movie}/>
                         ))
                     }
                 </div>
